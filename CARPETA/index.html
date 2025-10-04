@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Clue Game</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #f9fbff, #e6edfa);
+      margin: 0;
+      padding: 40px;
+      color: #333;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #1a4d8f;
+    }
+
+    .pista {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      max-width: 750px;
+      font-size: 1.1em;
+      position: relative;
+    }
+
+    .pista::before {
+      content: "🔍";
+      font-size: 1.5em;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+
+    .input-area {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    input[type="password"] {
+      padding: 12px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin: 10px 0;
+      width: 280px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 1em;
+      background-color: #1a4d8f;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+    }
+
+    button:hover {
+      background-color: #163a6d;
+      transform: translateY(-2px);
+    }
+
+    #pista2, #segundaClave, #pdf2 {
+      display: none;
+      animation: aparecer 0.6s ease-out;
+    }
+
+    @keyframes aparecer {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .download-link {
+      display: inline-block;
+      color: #fff;
+      background: #28a745;
+      padding: 12px 25px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease;
+    }
+
+    .download-link:hover {
+      background: #218838;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 600px;
+      font-size: 1.3em;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      animation: aparecer 0.5s ease-out;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      font-size: 2em;
+      cursor: pointer;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Texto de bienvenida -->
+  <h1>🎉 Bienvenidos al Clue Game 🎉</h1>
+  <p style="text-align:center; font-size:1.2em;">
+    Qué bueno volver a verlos. ¿Listos para una edición más de la mejor fucking clase del semestre?<br>  
+    Arma un equipo con el cual creas que puedes obtener la mejor nota. <br>
+    Usa tus habilidades multiformato, la IA y tu conocimiento cultural y de lectura. <br> 
+  </p>
+
+  <!-- 2. PDF inicial -->
+  <div class="input-area">
+    <h3>📄 Descarga este primer documento sobre el cual debes aplicar la pista 1:</h3>
+    <a href="Excel clave.pdf" target="_blank" class="download-link">Descargar PDF 1</a>
+  </div>
+
+  <!-- 3. Pista número 1 -->
+  <h2>Pista número 1</h2>
+  <div class="pista">
+    “Si el documento quieres leer,<br>
+    las identidades habrás de sumar<br>
+    y escribir junto al resultado el tipo más común en la base que no puede faltar”.
+  </div>
+
+  <!-- 4. Primera clave -->
+  <div class="input-area">
+    <label for="clave1"><strong>Ingresa la primera clave:</strong></label><br>
+    <input type="password" id="clave1" placeholder="Escribe la clave aquí">
+    <button onclick="verificarClave1()">Enviar</button>
+  </div>
+
+  <!-- 5. Pista número 2 -->
+  <div id="pista2">
+    <h2>Pista número 2</h2>
+    <div class="pista">
+      “Joven persona, pocas vueltas dio al sol para el tiempo de hoy.<br>
+      Tartarín de Koningsberg con el puño en la mejilla todo lo llegó a saber.<br>
+      Género: los ruegos de los ateos.”
+    </div>
+  </div>
+
+  <!-- Nuevo: Segundo PDF -->
+  <div id="pdf2" class="input-area">
+    <h3>📄 Descarga el segundo documento sobre el cual debes aplicar la pista 2:</h3>
+    <a href="Lecturas.pdf" target="_blank" class="download-link">Descargar PDF</a>
+  </div>
+
+  <!-- 6. Segunda clave -->
+  <div id="segundaClave" class="input-area">
+    <label for="clave2"><strong>Ingresa la segunda clave:</strong></label><br>
+    <input type="password" id="clave2" placeholder="Escribe la clave aquí">
+    <button onclick="verificarClave2()">Enviar</button>
+  </div>
+
+  <!-- 7. Modal de felicitaciones -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="cerrarModal()">&times;</span>
+      🎉 ¡Felicitaciones!<br><br>
+       Eres del putas!<br><br>
+       Resolviste el misterio. <br><br>
+      📚 Ojalá hayas alcanzado a obtener unos puntos, <br>
+      ✨ pero sobre todo ojalá hayas aprendido algo nuevo.
+    </div>
+  </div>
+
+  <script>
+    function verificarClave1() {
+      const clave = document.getElementById("clave1").value;
+      if (clave === "Perfil496969") {
+        document.getElementById("pista2").style.display = "block";
+        document.getElementById("pdf2").style.display = "block";
+        document.getElementById("segundaClave").style.display = "block";
+      } else {
+        alert("❌ Clave incorrecta, intenta de nuevo.");
+      }
+    }
+
+    function verificarClave2() {
+      const clave2 = document.getElementById("clave2").value.trim();
+      if (clave2.toLowerCase() === "giovanni pico della mirandola".toLowerCase()) {
+        document.getElementById("modal").style.display = "flex";
+      } else {
+        alert("❌ Segunda clave incorrecta, vuelve a intentarlo.");
+      }
+    }
+
+    function cerrarModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
+
